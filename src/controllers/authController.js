@@ -55,7 +55,36 @@ const login = async (req,res) => {
     }
 }
 
+const loginWithGoogle = async (req,res) => {
+
+    const {name, email} = req.body;
+    try {
+        let result = await pool.query(
+            'SELECT * FROM users WHERE email = $1',
+            [email]
+        );
+        if (result.rows.length === 0) {
+            reuslt = await pool.query (
+                'INSERT INTO users (name, email, passowrd) VALUES ($1,$2,$3) RETURNING *',
+                [name,email,'']
+            )
+        }
+        const user = result.rows[0];
+
+        const token = jwt.sign(
+            { id: user.id, email: user.email},
+            process.env.JWT_SECRET,
+            {expiresIn: '7d'}
+        );
+
+        res.json({token});
+    } catch (error) {
+        res.status(500).json({erro: "Erro ao logar com google"});
+    }
+}
+
 module.exports = {
     create,
     login,
+    loginWithGoogle
 }
