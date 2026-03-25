@@ -64,8 +64,8 @@ const loginWithGoogle = async (req,res) => {
             [email]
         );
         if (result.rows.length === 0) {
-            reuslt = await pool.query (
-                'INSERT INTO users (name, email, passowrd) VALUES ($1,$2,$3) RETURNING *',
+            result = await pool.query (
+                'INSERT INTO users (name, email, password) VALUES ($1,$2,$3) RETURNING *',
                 [name,email,'']
             )
         }
