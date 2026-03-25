@@ -87,4 +87,4 @@ module.exports = {
     create,
     login,
     loginWithGoogle
-}
+};
